@@ -29,14 +29,9 @@ import ChipCheckmark from './ChipCheckmark';
 
 export default class ChipSet extends Component {
   checkmarkWidth_ = 0;
-
-  constructor(props) {
-    super(props);
-    this.state = {
-      selectedChipIds: props.selectedChipIds,
-      foundation: null,
-    };
-  }
+  state = {
+    foundation: null,
+  };
 
   componentDidMount() {
     const foundation = new MDCChipSetFoundation(this.adapter);
@@ -45,13 +40,8 @@ export default class ChipSet extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    const {selectedChipIds} = this.props;
-
     if (this.state.foundation !== prevState.foundation) {
       this.initChipSelection();
-    }
-    if (selectedChipIds !== prevProps.selectedChipIds) {
-      this.setState({selectedChipIds});
     }
   }
 
@@ -71,11 +61,9 @@ export default class ChipSet extends Component {
   get adapter() {
     return {
       hasClass: (className) => this.classes.split(' ').includes(className),
-      setSelected: (chipId, selected) => {
+      setSelected: () => {
         const selectedChipIds = this.state.foundation.getSelectedChipIds();
-        this.setState({selectedChipIds}, () => {
-          this.props.handleSelect(selectedChipIds);
-        });
+        this.props.handleSelect(selectedChipIds);
       },
       removeChip: this.removeChip,
     };
@@ -84,7 +72,7 @@ export default class ChipSet extends Component {
   initChipSelection() {
     React.Children.forEach(this.props.children, (child) => {
       const {id} = child.props;
-      const selected = this.state.selectedChipIds.indexOf(id) > -1;
+      const selected = this.props.selectedChipIds.indexOf(id) > -1;
       if (selected) {
         this.state.foundation.select(id);
       }
@@ -133,8 +121,7 @@ export default class ChipSet extends Component {
   }
 
   renderChip = (chip) => {
-    const {filter} = this.props;
-    const {selectedChipIds} = this.state;
+    const {filter, selectedChipIds} = this.props;
     const selected = selectedChipIds.indexOf(chip.props.id) > -1;
     const props = Object.assign({
       selected,
