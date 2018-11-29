@@ -25,7 +25,7 @@ class ChipsTest extends React.Component {
         >
           {children}
         </ChipSet>
-        <button onClick={() => this.setState({selectedChipIds: ['2chip', '0chip']})}>
+        <button onClick={() => this.setState({selectedChipIds: isChoice ? ['0chip'] : ['2chip', '0chip']})}>
           {isChoice ? 'Select first' : 'Select first and last'}
         </button>
       </div>

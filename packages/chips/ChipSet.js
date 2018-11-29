@@ -35,7 +35,6 @@ export default class ChipSet extends Component {
     this.state = {
       selectedChipIds: props.selectedChipIds,
       foundation: null,
-      hasInitialized: false,
     };
   }
 
@@ -90,8 +89,6 @@ export default class ChipSet extends Component {
         this.state.foundation.select(id);
       }
     });
-
-    this.setState({hasInitialized: true});
   }
 
   handleInteraction = (chipId) => {
@@ -154,7 +151,7 @@ export default class ChipSet extends Component {
   render() {
     // need foundation on state, because Chip calls a foundation method
     // before ChipSet mounts.
-    if (!this.state.hasInitialized) return null;
+    if (!this.state.foundation) return null;
     return (
       <div className={this.classes}>
         {React.Children.map(this.props.children, this.renderChip)}
